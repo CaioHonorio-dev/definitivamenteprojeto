@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INCLUTECH WOMAN - Sua Jornada em TI</title>
+    <link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/128/13435/13435952.png" type="image/x-icon">
+    
+</head>
+
+<style>
+    @import url('CSS.css');
+</style>
+
+<script src="codigo.js"></script>
+
+<body>
+    <!-- ==================== NOTIFICAÇÃO ==================== -->
+    <div class="notification" id="notification">
+        <p id="notificationText"></p>
+    </div>
+
+    <!-- ==================== TELA DE LOGIN ==================== -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-box">
+            <div class="logo-login">💜 INCLUTECH WOMAN</div>
+            <h2 style="text-align: center; color: #020659; margin-bottom: 2rem;">Bem-vinda!</h2>
+            <!-- Formulário de Login -->
+            <div id="loginForm">
+                <div class="form-group">
+                    <label>E-mail</label>
+                    <input type="email" id="loginEmail" placeholder="seu@email.com">
+                    <div class="error-message" id="loginEmailError">Por favor, insira um e-mail válido (@gmail.com, @hotmail.com, etc)</div>
+                </div>
+                <div class="form-group">
+                    <label>Senha</label>
+                    <input type="password" id="loginSenha" placeholder="••••••••">
+                    <div class="error-message" id="loginSenhaError">A senha deve ter no mínimo 6 caracteres</div>
+                </div>
+                <button class="btn" onclick="validarLogin()">Entrar</button>
+                <div class="link-text">
+                    Não tem conta? <a href="#" onclick="mostrarCadastro()">Cadastre-se</a>
+                </div>
+            </div>
+            <!-- Formulário de Cadastro -->
+            <div id="cadastroForm" class="hidden">
+                <div class="form-group">
+                    <label>Nome Completo</label>
+                    <input type="text" id="cadastroNome" placeholder="Seu nome completo">
+                    <div class="error-message" id="cadastroNomeError">Por favor, insira seu nome completo</div>
+                </div>
+                <div class="form-group">
+                    <label>E-mail</label>
+                    <input type="email" id="cadastroEmail" placeholder="seu@email.com">
+                    <div class="error-message" id="cadastroEmailError">Por favor, insira um e-mail válido (@gmail.com, @hotmail.com, etc)</div>
+                </div>
+                <div class="form-group">
+                    <label>Senha</label>
+                    <input type="password" id="cadastroSenha" placeholder="••••••••" oninput="verificarForcaSenha()">
+                    <div class="password-strength">
+                        <div class="password-strength-bar" id="senhaStrengthBar"></div>
+                    </div>
+                    <div class="error-message" id="cadastroSenhaError">A senha deve ter no mínimo 6 caracteres</div>
+                </div>
+                <div class="form-group">
+                    <label>Confirmar Senha</label>
+                    <input type="password" id="cadastroConfirmaSenha" placeholder="••••••••">
+                    <div class="error-message" id="confirmarSenhaError">As senhas não coincidem</div>
+                </div>
+                <button class="btn" onclick="validarCadastro()">Cadastrar</button>
+                <div class="link-text">
+                    Já tem conta? <a href="#" onclick="mostrarLogin()">Fazer login</a>
+                </div>
+            </div>
+
+            <!-- Escolha do tipo de usuário -->
+            <div id="tipoUsuarioForm" class="hidden">
+                <h3 style="text-align: center; color: #020659; margin-bottom: 1.5rem;">Escolha o tipo de perfil</h3>
+                <button class="btn" style="margin-bottom: 1rem;" onclick="preencherDadosUsuaria()"> Usuária</button>
+                <button class="btn btn-secondary" onclick="preencherDadosEmpregador()"> Instituição/Empregador</button>
+            </div>
+
+            <!-- Dados da Usuária -->
+            <div id="dadosUsuariaForm" class="hidden">
+                <h3 style="text-align: center; color: #020659; margin-bottom: 1.5rem;">Dados da Usuária</h3>
+                <div class="form-group">
+                    <label>Área de Interesse</label>
+                    <select id="areaInteresse">
+                        <option value="">Selecione uma área</option>
+                        <option>Desenvolvimento Web</option>
+                        <option>Ciência de Dados</option>
+                        <option>UX/UI Design</option>
+                        <option>DevOps</option>
+                        <option>Segurança da Informação</option>
+                        <option>Outro</option>
+                    </select>
+                    <div class="error-message" id="areaInteresseError">Por favor, selecione uma área de interesse</div>
+                </div>
+                <div class="form-group">
+                    <label>Nível de Experiência</label>
+                    <select id="nivelExp">
+                        <option value="">Selecione seu nível</option>
+                        <option>Iniciante</option>
+                        <option>Intermediário</option>
+                        <option>Avançado</option>
+                    </select>
+                    <div class="error-message" id="nivelExpError">Por favor, selecione seu nível de experiência</div>
+                </div>
+                <div class="form-group">
+                    <label>Telefone</label>
+                    <input type="tel" id="telefone" placeholder="(00) 00000-0000" maxlength="15" oninput="formatarTelefone(this)">
+                    <div class="error-message" id="telefoneError">Por favor, insira um telefone válido</div>
+                </div>
+                <button class="btn" onclick="validarDadosUsuaria()">Finalizar Cadastro</button>
+            </div>
+
+            <!-- Dados do Empregador -->
+            <div id="dadosEmpregadorForm" class="hidden">
+                <h3 style="text-align: center; color: #020659; margin-bottom: 1.5rem;">Dados do Empregador</h3>
+                <div class="form-group">
+                    <label>Nome da Empresa</label>
+                    <input type="text" id="nomeEmpresa" placeholder="Nome da empresa">
+                    <div class="error-message" id="nomeEmpresaError">Por favor, insira o nome da empresa</div>
+                </div>
+                <div class="form-group">
+                    <label>CNPJ</label>
+                    <input type="text" id="cnpj" placeholder="00.000.000/0000-00" maxlength="18" oninput="formatarCNPJ(this)">
+                    <div class="error-message" id="cnpjError">Por favor, insira um CNPJ válido</div>
+                </div>
+                <div class="form-group">
+                    <label>Setor</label>
+                    <select id="setor">
+                        <option value="">Selecione um setor</option>
+                        <option>Tecnologia</option>
+                        <option>Consultoria</option>
+                        <option>Educação</option>
+                        <option>E-commerce</option>
+                        <option>Outro</option>
+                    </select>
+                    <div class="error-message" id="setorError">Por favor, selecione um setor</div>
+                </div>
+                <button class="btn" onclick="validarDadosEmpregador()">Finalizar Cadastro</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== PLATAFORMA PRINCIPAL ==================== -->
+    <div class="main-platform" id="mainPlatform">
+        <!-- Header com navegação -->
+        <header class="header">
+            <div class="logo">💜 INCLUTECH WOMAN</div>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="#" class="active" onclick="mostrarAba('inicio')">Início</a></li>
+                    <li><a href="#" onclick="mostrarAba('sobre')">Sobre</a></li>
+                    <li><a href="#" onclick="mostrarAba('cursos')">Cursos</a></li>
+                    <li><a href="#" onclick="mostrarAba('vagas')">Vagas</a></li>
+                    <li><a href="#" onclick="mostrarAba('redes')">Redes</a></li>
+                </ul>
+            </nav>
+            <div class="user-menu">
+                <!-- Dropdown do usuário -->
+                <div class="dropdown" onclick="toggleDropdown()">
+                    <div class="user-icon">
+                        <img src="https://cdn-icons-png.flaticon.com/128/16308/16308097.png" alt="Usuário">
+                    </div>
+                    <div class="dropdown-content">
+                        <a href="#" onclick="mostrarAba('perfil')">Meu Perfil</a>
+                        <a href="#" onclick="mostrarAba('meus-cursos')">Meus Cursos</a>
+                        <a href="#" onclick="mostrarAba('minhas-vagas')">Minhas Vagas</a>
+                        <a href="#" onclick="mostrarAba('planos')">Planos</a>
+                        <a href="#" onclick="sair()">Sair</a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="content">
+            <!-- ==================== ABA INÍCIO ==================== -->
+            <div class="tab-content active" id="inicio">
+                <div class="hero-section">
+                    <h1>Bem-vinda a INCLUTECH WOMAN!💜</h1>
+                    <p>Uma plataforma que transforma, engaja e apoia a jornada das mulheres no mundo da tecnologia</p>
+                </div>
+                <div class="cards-grid">
+                    <!-- Card de Cursos -->
+                    <div class="card">
+                        <img src="https://cdn.pixabay.com/photo/2020/10/23/14/55/woman-5678999_1280.jpg"  alt="Mulher programando" class="card-image">
+                        <div class="card-content">
+                            <div class="card-header">
+                                <div class="card-icon">
+                                    <img src="https://cdn-icons-png.flaticon.com/128/3917/3917749.png" alt="ícone">
+                                </div>
+                                <h3>Cursos</h3>
+                            </div>
+                            <p>Acesse formações para melhorar seu currículo e avançar na carreira</p>
+                            <button class="card-btn" onclick="mostrarAba('cursos')">Ver Cursos</button>
+                        </div>
+                    </div>
+                    <!-- Card de Vagas -->
+                    <div class="card">
+                        <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=600&h=400&fit=crop" alt="Mulher em reunião de tecnologia" class="card-image">
+                        <div class="card-content">
+                            <div class="card-header">
+                                <div class="card-icon ">
+                                     <img src="https://cdn-icons-png.flaticon.com/128/3916/3916670.png" alt="Ícone">
+                                </div>
+                                <h3>Vagas</h3>
+                            </div>
+                            <p>Encontre oportunidades ou divulgue vagas para mulheres em TI</p>
+                            <button class="card-btn" onclick="mostrarAba('vagas')">Explorar Vagas</button>
+                        </div>
+                    </div>
+                    <!-- Card de Networking -->
+                    <div class="card">
+                        <img src="https://images.unsplash.com/photo-1629904853716-f0bc54eea481?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGN5YmVyc2VjdXJpdHl8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&q=60&w=600" alt="Mulheres em networking" class="card-image">
+                        <div class="card-content">
+                            <div class="card-header">
+                                <div class="card-icon">
+                                    <img src="https://cdn-icons-png.flaticon.com/128/3914/3914353.png" alt="Ícone">
+                                </div>
+                                <h3>Networking</h3>
+                            </div>
+                            <p>Conecte-se com comunidades e eleve seu engajamento</p>
+                            <button class="card-btn" onclick="mostrarAba('redes')">Conectar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== ABA SOBRE ==================== -->
+            <div class="tab-content" id="sobre">
+                <!-- Botão para voltar ao início -->
+                <button class="btn-back" onclick="mostrarAba('inicio')">
+                    ← Voltar ao Início
+                </button>
+                
+                <div class="hero-section">
+                    <h1>Nossa História </h1>
+                    <p style="text-align: left; margin-top: 2rem;">
+                        A <strong>INCLUTECH WOMAN</strong> nasceu da necessidade de criar um espaço acolhedor e transformador para mulheres na tecnologia. 
+                        Percebemos que, apesar de iniciativas promissoras, muitas plataformas falhavam em se comunicar de maneira eficaz 
+                        com o público feminino.
+                    </p>
+                    <p style="text-align: left; margin-top: 1rem;">
+                        Nossa missão é clara: reposicionar estrategicamente a inclusão de mulheres em TI, aumentar o interesse e adesão 
+                        de mulheres na área, melhorar a retenção de participantes, e criar uma comunidade de apoio e desenvolvimento contínuo.
+                    </p>
+                    <h2 style="color: #020659; margin-top: 2rem;">Nossos Propósitos</h2>
+                    <ul style="text-align: left; margin-top: 1rem; line-height: 2;">
+                        <li> Promover inclusão genuína e sustentável</li>
+                        <li> Fortalecer a presença feminina na tecnologia</li>
+                        <li> Criar referências e modelos inspiradores</li>
+                        <li> Construir uma rede de apoio mútuo</li>
+                        <li> Impulsionar carreiras e oportunidades</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- ==================== ABA CURSOS ==================== -->
+            <div class="tab-content" id="cursos">
+                <!-- Botão para voltar ao início -->
+                <button class="btn-back" onclick="mostrarAba('inicio')">
+                    ← Voltar ao Início
+                </button>
+                
+                <div class="hero-section">
+                    <h1>Cursos e Formações </h1>
+                    <p>Formações em parceria com empresas educacionais para melhorar seu currículo</p>
+                </div>
+                <div class="cards-grid">
+                    <!-- Card: Desenvolvimento Web -->
+                    <div class="card">
+                        <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&h=400&fit=crop" alt="Mulher programando" class="card-image">
+                        <div class="card-content">
+                            <div class="card-header">
+                                <div class="card-icon"></div>
+                                <h3>Desenvolvimento Web Full Stack</h3>
+                            </div>
+                            <p><strong>Duração:</strong> 6 meses</p>
+                            <p>Aprenda HTML, CSS, JavaScript, React e Node.js do zero ao avançado</p>
+                            <p><strong>Parceiro:</strong> TechAcademy</p>
+                            <button class="card-btn" onclick="verDetalhes('web')">Ver Detalhes</button>
+                        </div>
+                    </div>
+                    <!-- Card: Ciência de Dados -->
+                    <div class="card">
+                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop" alt="Mulher analisando dados" class="card-image">
+                        <div class="card-content">
+                            <div class="card-header">
+                                <div class="card-icon"></div>
+                                <h3>Ciência de Dados</h3>
+                            </div>
+                            <p><strong>Duração:</strong> 8 meses</p>
+                            <p>Python, análise de dados, machine learning e visualização</p>
+                            <p><strong>Parceiro:</strong> DataScience Pro</p>
+                            <button class="card-btn" onclick="verDetalhes('data')">Ver Detalhes</button>
+                        </div>
+                    </div>
+                    <!-- Card: UX/UI Design -->
+                    <div class="card">
+                        <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=600&h=400&fit=crop" alt="Mulher em design UX" class="card-image">
+                        <div class="card-content">
+                            <div class="card-header">
+                                <div class="card-icon"></div>
+                                <h3>UX/UI Design</h3>
+                            </div>
+                            <p><strong>Duração:</strong> 4 meses</p>
+                            <p>Design thinking, prototipação, Figma e pesquisa com usuários</p>
+                            <p><strong>Parceiro:</strong> Design Lab</p>
+                            <button class="card-btn" onclick="verDetalhes('ux')">Ver Detalhes</button>
+                        </div>
+                    </div>
+                    <!-- Card: Segurança da Informação -->
+                    <div class="card">
+                        <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=600&h=400&fit=crop" alt="Mulher em segurança da informação" class="card-image">
+                        <div class="card-content">
+                            <div class="card-header">
+                                <div class="card-icon"></div>
+                                <h3>Segurança da Informação</h3>
+                            </div>
+                            <p><strong>Duração:</strong> 6 meses</p>
+                            <p>Ethical hacking, criptografia, análise de vulnerabilidades</p>
+                            <p><strong>Parceiro:</strong> CyberSec Academy</p>
+                            <button class="card-btn" onclick="verDetalhes('sec')">Ver Detalhes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== ABA VAGAS ==================== -->
+            <div class="tab-content" id="vagas">
+                <!-- Botão para voltar ao início -->
+                <button class="btn-back" onclick="mostrarAba('inicio')">
+                    ← Voltar ao Início
+                </button>
+                
+                <div class="hero-section">
+                    <h1>Oportunidades em TI </h1>
+                    <p id="vagasDescricao">Encontre a vaga perfeita para sua carreira</p>
+                </div>
+
+                <!-- Formulário para divulgar vagas (apenas para empregadores) -->
+                <div id="divulgarVagaForm" class="form-vaga hidden">
+                    <h3>Divulgar Nova Vaga</h3>
+                    <div class="form-group">
+                        <label>Título da Vaga</label>
+                        <input type="text" id="tituloVaga" placeholder="Ex: Desenvolvedora Front-end">
+                        <div class="error-message" id="tituloVagaError">Por favor, insira o título da vaga</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Descrição</label>
+                        <textarea id="descricaoVaga" placeholder="Descreva a vaga, requisitos e benefícios"></textarea>
+                        <div class="error-message" id="descricaoVagaError">Por favor, insira a descrição da vaga</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Localização</label>
+                        <input type="text" id="localVaga" placeholder="Ex: São Paulo - SP (Remoto)">
+                        <div class="error-message" id="localVagaError">Por favor, insira a localização</div>
+                    </div>
+                    <button class="btn" onclick="publicarVaga()">Publicar Vaga</button>
+                </div>
+
+                <div class="cards-grid">
+                    <!-- Vaga: Desenvolvedora Front-end -->
+                    <div class="card">
+                        <img src="https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=600&h=400&fit=crop" alt="Desenvolvedora trabalhando" class="card-image">
+                        <div class="card-content">
+                            <div class="card-header">
+                                <div class="card-icon"></div>
+                                <h3>Desenvolvedora Front-end Jr</h3>
+                            </div>
+                            <p><strong>Empresa:</strong> Tech Solutions</p>
+                            <p><strong>Local:</strong> Remoto</p>
+                            <p>React, JavaScript, CSS. Ambiente inclusivo e diverso.</p>
+                            <button class="card-btn" onclick="candidatar('front')">Candidatar-se</button>
+                        </div>
+                    </div>
+                    <!-- Vaga: Analista de Dados -->
+                    <div class="card">
+                        <img src="https://cdn.pixabay.com/photo/2016/06/03/13/57/digital-marketing-1433427_1280.jpg" alt="Analista de dados" class="card-image">
+                        <div class="card-content">
+                            <div class="card-header">
+                                <div class="card-icon"></div>
+                                <h3>Analista de Dados</h3>
+                            </div>
+                            <p><strong>Empresa:</strong> Data Corp</p>
+                            <p><strong>Local:</strong> São Paulo - SP</p>
+                            <p>Python, SQL, Power BI. Foco em diversidade.</p>
+                            <button class="card-btn" onclick="candidatar('data')">Candidatar-se</button>
+                        </div>
+                    </div>
+                    <!-- Vaga: UX Designer -->
+                    <div class="card">
+                        <img src="https://cdn.pixabay.com/photo/2025/09/09/08/52/design-9824072_1280.jpg" alt="UX Designer" class="card-image">
+                        <div class="card-content">
+                            <div class="card-header">
+                                <div class="card-icon"></div>
+                                <h3>UX Designer Pleno</h3>
+                            </div>
+                            <p><strong>Empresa:</strong> Creative Studio</p>
+                            <p><strong>Local:</strong> Remoto</p>
+                            <p>Figma, pesquisa com usuários, prototipação.</p>
+                            <button class="card-btn" onclick="candidatar('ux')">Candidatar-se</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== ABA REDES ==================== -->
+            <div class="tab-content" id="redes">
+                <!-- Botão para voltar ao início -->
+                <button class="btn-back" onclick="mostrarAba('inicio')">
+                    ← Voltar ao Início
+                </button>
+                
+                <div class="hero-section">
+                    <h1>Comunidades e Networking </h1>
+                    <p>Conecte-se com comunidades de diversos nichos e eleve seu engajamento</p>
+                </div>
+                <div class="cards-grid">
+                    <!-- Comunidade: Desenvolvedoras Web -->
+                    <div class="card">
+                        <img src="https://images.unsplash.com/photo-1648737965255-e1e6f33f0937?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170" alt="Comunidade de desenvolvedoras" class="card-image">
+                        <div class="card-content">
+                            <div class="card-header">
+                                <div class="card-icon"></div>
+                                <h3>Desenvolvedoras Web</h3>
+                            </div>
+                            <p><strong>850 membros</strong></p>
+                            <p>Comunidade para troca de experiências em desenvolvimento web</p>
+                            <button class="card-btn" onclick="entrarComunidade('web')">Entrar</button>
+                        </div>
+                    </div>
+                    <!-- Comunidade: Data Science -->
+                    <div class="card">
+                        <img src="https://images.unsplash.com/photo-1504639725590-34d0984388bd?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1074" alt="Mulheres em Data Science" class="card-image">
+                        <div class="card-content">
+                            <div class="card-header">
+                                <div class="card-icon"></div>
+                                <h3>Mulheres em Data Science</h3>
+                            </div>
+                            <p><strong>620 membros</strong></p>
+                            <p>Grupo focado em ciência de dados e machine learning</p>
+                            <button class="card-btn" onclick="entrarComunidade('data')">Entrar</button>
+                        </div>
+                    </div>
+                    <!-- Comunidade: Design e UX -->
+                    <div class="card">
+                        <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=600&h=400&fit=crop" alt="Designers UX" class="card-image">
+                        <div class="card-content">
+                            <div class="card-header">
+                                <div class="card-icon"></div>
+                                <h3>Design e UX</h3>
+                            </div>
+                            <p><strong>940 membros</strong></p>
+                            <p>Comunidade de designers focadas em experiência do usuário</p>
+                            <button class="card-btn" onclick="entrarComunidade('ux')">Entrar</button>
+                        </div>
+                    </div>
+                    <!-- Comunidade: CyberSecurity -->
+                    <div class="card">
+                        <img src="https://images.unsplash.com/photo-1584433144859-1fc3ab64a957?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8Y3liZXJzZWN1cml0eXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=60&w=600" alt="CyberSecurity Women" class="card-image">
+                        <div class="card-content">
+                            <div class="card-header">
+                                <div class="card-icon"></div>
+                                <h3>CyberSecurity Women</h3>
+                            </div>
+                            <p><strong>430 membros</strong></p>
+                            <p>Rede de profissionais de segurança da informação</p>
+                            <button class="card-btn" onclick="entrarComunidade('sec')">Entrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== ABA PERFIL ==================== -->
+            <div class="tab-content" id="perfil">
+                <!-- Botão para voltar ao início -->
+                <button class="btn-back" onclick="mostrarAba('inicio')">
+                    ← Voltar ao Início
+                </button>
+                
+                <div class="hero-section">
+                    <h1>Meu Perfil </h1>
+                </div>
+                <div class="form-vaga">
+                    <h3>Informações Pessoais</h3>
+                    <div class="form-group">
+                        <label>Nome</label>
+                        <input type="text" id="perfilNome" value="Usuária">
+                    </div>
+                    <div class="form-group">
+                        <label>E-mail</label>
+                        <input type="email" id="perfilEmail" value="usuario@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Telefone</label>
+                        <input type="tel" id="perfilTelefone" placeholder="(00) 00000-0000">
+                    </div>
+                    <button class="btn" onclick="salvarPerfil()">Salvar Alterações</button>
+                </div>
+            </div>
+
+            <!-- ==================== ABA MEUS CURSOS ==================== -->
+            <div class="tab-content" id="meus-cursos">
+                <!-- Botão para voltar ao início -->
+                <button class="btn-back" onclick="mostrarAba('inicio')">
+                    ← Voltar ao Início
+                </button>
+                
+                <div class="hero-section">
+                    <h1>Meus Cursos </h1>
+                    <p>Acompanhe seu progresso e continue aprendendo</p>
+                </div>
+                <div class="cards-grid">
+                    <div class="card">
+                        <div class="card-content">
+                            <h3>Nenhum curso matriculado ainda</h3>
+                            <p>Explore nossa seção de cursos e comece sua jornada!</p>
+                            <button class="card-btn" onclick="mostrarAba('cursos')">Ver Cursos</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== ABA MINHAS VAGAS ==================== -->
+            <div class="tab-content" id="minhas-vagas">
+                <!-- Botão para voltar ao início -->
+                <button class="btn-back" onclick="mostrarAba('inicio')">
+                    ← Voltar ao Início
+                </button>
+                
+                <div class="hero-section">
+                    <h1>Minhas Candidaturas </h1>
+                    <p id="minhasVagasDesc">Acompanhe o status das suas candidaturas</p>
+                </div>
+                <div class="cards-grid">
+                    <div class="card">
+                        <div class="card-content">
+                            <h3>Nenhuma candidatura ainda</h3>
+                            <p>Explore vagas e candidate-se às oportunidades!</p>
+                            <button class="card-btn" onclick="mostrarAba('vagas')">Ver Vagas</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== ABA PLANOS ==================== -->
+            <div class="tab-content" id="planos">
+                <!-- Botão para voltar ao início -->
+                <button class="btn-back" onclick="mostrarAba('inicio')">
+                    ← Voltar ao Início
+                </button>
+                
+                <div class="hero-section">
+                    <h1>Planos e Assinaturas 💎</h1>
+                    <p>Escolha o plano ideal para sua jornada</p>
+                </div>
+                <div class="cards-grid">
+                    <!-- Plano Gratuito -->
+                    <div class="card">
+                        <div class="card-content">
+                            <h3>Plano Gratuito</h3>
+                            <p><strong>R$ 0/mês</strong></p>
+                            <p>✓ Acesso a cursos básicos</p>
+                            <p>✓ Comunidades públicas</p>
+                            <p>✓ 3 candidaturas por mês</p>
+                            <button class="card-btn">Plano Atual</button>
+                        </div>
+                    </div>
+                    <!-- Plano Premium -->
+                    <div class="card">
+                        <div class="card-content">
+                            <h3>Plano Premium</h3>
+                            <p><strong>R$ 49,90/mês</strong></p>
+                            <p>✓ Todos os cursos</p>
+                            <p>✓ Mentoria individual</p>
+                            <p>✓ Candidaturas ilimitadas</p>
+                            <p>✓ Certificados</p>
+                            <button class="card-btn" onclick="assinarPlano('premium')">Assinar</button>
+                        </div>
+                    </div>
+                    <!-- Plano Empresarial -->
+                    <div class="card">
+                        <div class="card-content">
+                            <h3>Plano Empresarial</h3>
+                            <p><strong>R$ 199,90/mês</strong></p>
+                            <p>✓ Divulgação de vagas</p>
+                            <p>✓ Acesso a talentos</p>
+                            <p>✓ Painel de recrutamento</p>
+                            <p>✓ Suporte prioritário</p>
+                            <button class="card-btn" onclick="assinarPlano('empresarial')">Assinar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== DASHBOARD DO EMPREGADOR ==================== -->
+        <div id="empregadorDashboard" class="empregador-dashboard">
+            <div class="hero-section">
+                <h1>Painel do Empregador/Instituição 💼</h1>
+                <p>Bem-vindo ao seu painel de gestão</p>
+            </div>
+
+            <!-- Menu de Navegação do Empregador -->
+           <div class="nav-menu-empregador">
+    <button class="nav-btn-emp active" onclick="mostrarSecaoEmpregador('pedidos-emp')">
+         Pedidos
+    </button>
+    <button class="nav-btn-emp" onclick="mostrarSecaoEmpregador('publicar-emp')">
+         Publicar Vaga/Curso
+    </button>
+    <button class="nav-btn-emp" onclick="mostrarSecaoEmpregador('publicacoes-emp')">
+         Minhas Publicações
+    </button>
+    <button class="nav-btn-emp" onclick="mostrarSecaoEmpregador('candidatos-emp')">
+         Candidatos
+    </button>
+    <button class="nav-btn-emp" onclick="mostrarSecaoEmpregador('sobre-emp')">
+         Sobre
+    </button>
+    <button class="nav-btn-emp" onclick="mostrarSecaoEmpregador('perfil-empregador')">
+        ⚙️ Configurações
+    </button>
+</div>
+
+            <!-- Seção: Pedidos -->
+            <div id="pedidos-emp" class="content-section-emp active">
+    <h2 style="color: #ffffff; margin-bottom: 2rem;"> Pedidos Postados</h2>
+                
+                <div class="pedidos-container">
+                    <!-- Exemplo de Pedido 1 -->
+                    <div class="pedido-card">
+                        <div class="pedido-header">
+                            <div class="pedido-info">
+                                <h3>Solicitação de Cadastro de Vaga</h3>
+                                <p>Recebido em: 14/11/2025 às 14:30</p>
+                            </div>
+                            <span class="pedido-status status-pendente">Pendente</span>
+                        </div>
+                        <div class="pedido-detalhes">
+                            <p><strong>Solicitante:</strong> Maria Silva</p>
+                            <p><strong>E-mail:</strong> maria.silva@email.com</p>
+                            <p><strong>Cargo:</strong> Auxiliar Administrativa</p>
+                            <p><strong>Empresa:</strong> Tech Solutions Ltda</p>
+                            <p><strong>Tipo:</strong> Vaga de Emprego</p>
+                        </div>
+                        <div class="acoes-pedido">
+                            <button class="btn-aprovar" onclick="aprovarPedido(1)">✓ Aprovar</button>
+                            <button class="btn-rejeitar" onclick="rejeitarPedido(1)">✗ Rejeitar</button>
+                        </div>
+                    </div>
+
+                    <!-- Exemplo de Pedido 2 -->
+                    <div class="pedido-card">
+                        <div class="pedido-header">
+                            <div class="pedido-info">
+                                <h3>Inscrição em Curso de Capacitação</h3>
+                                <p>Recebido em: 13/11/2025 às 10:15</p>
+                            </div>
+                            <span class="pedido-status status-aprovado">Aprovado</span>
+                        </div>
+                        <div class="pedido-detalhes">
+                            <p><strong>Candidata:</strong> Ana Costa</p>
+                            <p><strong>E-mail:</strong> ana.costa@email.com</p>
+                            <p><strong>Curso:</strong> Informática Básica</p>
+                            <p><strong>Turma:</strong> Noturno - Início: 20/11/2025</p>
+                            <p><strong>Telefone:</strong> (83) 99999-8888</p>
+                        </div>
+                    </div>
+
+                    <!-- Exemplo de Pedido 3 -->
+                    <div class="pedido-card">
+                        <div class="pedido-header">
+                            <div class="pedido-info">
+                                <h3>Solicitação de Parceria para Curso</h3>
+                                <p>Recebido em: 12/11/2025 às 16:45</p>
+                            </div>
+                            <span class="pedido-status status-pendente">Pendente</span>
+                        </div>
+                        <div class="pedido-detalhes">
+                            <p><strong>Instituição:</strong> Instituto de Tecnologia XYZ</p>
+                            <p><strong>E-mail:</strong> contato@institutoxyz.com.br</p>
+                            <p><strong>Curso proposto:</strong> Python para Iniciantes</p>
+                            <p><strong>Duração:</strong> 3 meses</p>
+                            <p><strong>Modalidade:</strong> Online</p>
+                        </div>
+                        <div class="acoes-pedido">
+                            <button class="btn-aprovar" onclick="aprovarPedido(3)">✓ Aprovar</button>
+                            <button class="btn-rejeitar" onclick="rejeitarPedido(3)">✗ Rejeitar</button>
+                        </div>
+                    </div>
+
+                    <div id="listaPedidos"></div>
+                </div>
+            </div>
+
+            <!-- Seção: Publicar Vaga/Curso -->
+            <div id="publicar-emp" class="content-section-emp">
+    <button class="btn-back" onclick="voltarMenuEmpregador()">
+        ← Voltar ao Menu
+    </button>
+    <h2 style="color: #ffffff; margin-bottom: 2rem;">Publicar Nova Vaga ou Curso</h2>
+                
+                <div class="form-publicacao">
+                    <h3>Informações da Publicação</h3>
+                    
+                    <div class="form-group">
+                        <label>Tipo de Publicação *</label>
+                        <select id="tipoPublicacaoEmp" onchange="alternarCamposPublicacao()">
+                            <option value="vaga">Vaga de Emprego</option>
+                            <option value="curso">Curso/Capacitação</option>
+                        </select>
+                    </div>
+
+                    <!-- Campos para Vaga de Emprego -->
+                    <div id="camposVagaEmp">
+                        <div class="form-group">
+                            <label>Título da Vaga *</label>
+                            <input type="text" id="tituloVagaEmp" placeholder="Ex: Desenvolvedora Front-end Júnior">
+                            <div class="error-message" id="tituloVagaEmpError">Por favor, insira o título da vaga</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Empresa/Instituição *</label>
+                            <input type="text" id="nomeEmpresaEmp" placeholder="Nome da sua empresa">
+                            <div class="error-message" id="nomeEmpresaEmpError">Por favor, insira o nome da empresa</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Descrição da Vaga *</label>
+                            <textarea id="descricaoVagaEmp" placeholder="Descreva as responsabilidades, requisitos e o que oferecemos..." rows="5"></textarea>
+                            <div class="error-message" id="descricaoVagaEmpError">Por favor, descreva a vaga</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Localização *</label>
+                            <input type="text" id="localizacaoVagaEmp" placeholder="Ex: Campina Grande - PB (Presencial/Remoto)">
+                            <div class="error-message" id="localizacaoVagaEmpError">Por favor, insira a localização</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Tipo de Contrato</label>
+                            <select id="tipoContratoEmp">
+                                <option value="clt">CLT</option>
+                                <option value="pj">PJ</option>
+                                <option value="temporario">Temporário</option>
+                                <option value="estagio">Estágio</option>
+                                <option value="freelance">Freelance</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Salário</label>
+                            <input type="text" id="salarioVagaEmp" placeholder="Ex: R$ 2.500,00 ou A combinar">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Requisitos</label>
+                            <textarea id="requisitosVagaEmp" placeholder="Liste os requisitos necessários para a vaga..." rows="4"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Benefícios</label>
+                            <textarea id="beneficiosVagaEmp" placeholder="Ex: Vale transporte, vale alimentação, plano de saúde..." rows="3"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Campos para Curso (inicialmente ocultos) -->
+                    <div id="camposCursoEmp" style="display: none;">
+                        <div class="form-group">
+                            <label>Nome do Curso *</label>
+                            <input type="text" id="nomeCursoEmp" placeholder="Ex: Desenvolvimento Web Full Stack">
+                            <div class="error-message" id="nomeCursoEmpError">Por favor, insira o nome do curso</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Instituição Responsável *</label>
+                            <input type="text" id="instituicaoCursoEmp" placeholder="Nome da instituição">
+                            <div class="error-message" id="instituicaoCursoEmpError">Por favor, insira a instituição</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Descrição do Curso *</label>
+                            <textarea id="descricaoCursoEmp" placeholder="Descreva o conteúdo programático, objetivos e metodologia..." rows="5"></textarea>
+                            <div class="error-message" id="descricaoCursoEmpError">Por favor, descreva o curso</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Carga Horária *</label>
+                            <input type="text" id="cargaHorariaCursoEmp" placeholder="Ex: 80 horas">
+                            <div class="error-message" id="cargaHorariaCursoEmpError">Por favor, insira a carga horária</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Data de Início *</label>
+                            <input type="date" id="dataInicioCursoEmp">
+                            <div class="error-message" id="dataInicioCursoEmpError">Por favor, selecione a data de início</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Horário</label>
+                            <input type="text" id="horarioCursoEmp" placeholder="Ex: Segunda a Sexta, 19h às 22h">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Número de Vagas</label>
+                            <input type="number" id="vagasCursoEmp" placeholder="Ex: 30" min="1">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Modalidade</label>
+                            <select id="modalidadeCursoEmp">
+                                <option value="presencial">Presencial</option>
+                                <option value="online">Online</option>
+                                <option value="hibrido">Híbrido</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Requisitos para Participação</label>
+                            <textarea id="requisitosCursoEmp" placeholder="Pré-requisitos necessários..." rows="3"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Contato para Informações *</label>
+                        <input type="text" id="contatoPublicacaoEmp" placeholder="E-mail ou telefone para contato">
+                        <div class="error-message" id="contatoPublicacaoEmpError">Por favor, insira um contato</div>
+                    </div>
+
+                    <button class="btn" onclick="publicarConteudoEmpregador()" style="width: 100%; margin-top: 1rem; font-size: 1.1rem;">
+                        📤 Publicar Agora
+                    </button>
+                </div>
+            </div>
+
+            <!-- Seção: Minhas Publicações -->
+            <div id="publicacoes-emp" class="content-section-emp">
+    <button class="btn-back" onclick="voltarMenuEmpregador()">
+        ← Voltar ao Menu
+    </button>
+    <h2 style="color: #ffffff; margin-bottom: 2rem;">Minhas Publicações</h2>
+                
+                <div class="vagas-publicadas-emp">
+                    <!-- Exemplo de Publicação 1 -->
+                    <div class="vaga-emp-item">
+                        <div class="vaga-emp-header">
+                            <h3>Desenvolvedora Front-end Júnior</h3>
+                            <span class="vaga-badge">🟢 Ativa</span>
+                        </div>
+                        <div class="vaga-emp-detalhes">
+                            <p><strong>Empresa:</strong> Tech Solutions Ltda</p>
+                            <p><strong>Publicado em:</strong> 10/11/2025</p>
+                            <p><strong>Candidatas:</strong> 15 pessoas interessadas</p>
+                            <p><strong>Local:</strong> Campina Grande - PB (Híbrido)</p>
+                        </div>
+                        <div class="vaga-emp-acoes">
+                            <button class="btn-candidatos" onclick="verCandidatosVaga(1)">Ver Candidatos (15)</button>
+                            <button class="btn-editar" onclick="editarPublicacao(1)">Editar</button>
+                            <button class="btn-excluir" onclick="excluirPublicacao(1)">Excluir</button>
+                        </div>
+                    </div>
+
+                    <!-- Exemplo de Publicação 2 -->
+                    <div class="vaga-emp-item">
+                        <div class="vaga-emp-header">
+                            <h3>Curso de Python para Iniciantes</h3>
+                            <span class="vaga-badge">🟢 Ativa</span>
+                        </div>
+                        <div class="vaga-emp-detalhes">
+                            <p><strong>Instituição:</strong> Instituto SENAI</p>
+                            <p><strong>Publicado em:</strong> 05/11/2025</p>
+                            <p><strong>Inscritas:</strong> 28 de 30 vagas</p>
+                            <p><strong>Início:</strong> 20/11/2025</p>
+                        </div>
+                        <div class="vaga-emp-acoes">
+                            <button class="btn-candidatos" onclick="verCandidatosVaga(2)">Ver Inscritas (28)</button>
+                            <button class="btn-editar" onclick="editarPublicacao(2)">Editar</button>
+                            <button class="btn-excluir" onclick="excluirPublicacao(2)">Excluir</button>
+                        </div>
+                    </div>
+
+                    <div id="listaPublicacoesEmp"></div>
+                </div>
+            </div>
+
+            <!-- Seção: Candidatos -->
+            <div id="candidatos-emp" class="content-section-emp">
+    <button class="btn-back" onclick="voltarMenuEmpregador()">
+        ← Voltar ao Menu
+    </button>
+    <h2 style="color: #ffffff; margin-bottom: 2rem;">👥 Candidatas e Inscritas</h2>
+                
+                <div class="candidatos-lista">
+                    <p style="text-align: center; color: #666; font-size: 1.1rem;">
+                        Selecione uma publicação na seção "Minhas Publicações" para visualizar os candidatos.
+                    </p>
+                    <div id="listaCandidatosEmp"></div>
+                </div>
+            </div>
+
+            <!-- Seção: Configurações do Perfil -->
+            <div id="perfil-empregador" class="content-section-emp">
+    <button class="btn-back" onclick="voltarMenuEmpregador()">
+        ← Voltar ao Menu
+    </button>
+    <h2 style="color: #ffffff; margin-bottom: 2rem;">⚙️ Configurações do Perfil</h2>
+                
+                <div class="form-publicacao">
+                    <h3>Informações da Empresa/Instituição</h3>
+                    
+                    <div class="form-group">
+                        <label>Nome da Empresa/Instituição *</label>
+                        <input type="text" id="nomePerfilEmp" placeholder="Nome completo">
+                    </div>
+
+                    <div class="form-group">
+                        <label>CNPJ</label>
+                        <input type="text" id="cnpjPerfilEmp" placeholder="00.000.000/0000-00" maxlength="18" oninput="formatarCNPJ(this)">
+                    </div>
+
+                    <div class="form-group">
+                        <label>E-mail Corporativo *</label>
+                        <input type="email" id="emailPerfilEmp" placeholder="contato@empresa.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Telefone *</label>
+                        <input type="tel" id="telefonePerfilEmp" placeholder="(00) 00000-0000" maxlength="15" oninput="formatarTelefone(this)">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Endereço Completo</label>
+                        <input type="text" id="enderecoPerfilEmp" placeholder="Rua, número, bairro, cidade">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Site</label>
+                        <input type="url" id="sitePerfilEmp" placeholder="https://www.empresa.com.br">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Sobre a Empresa/Instituição</label>
+                        <textarea id="sobrePerfilEmp" placeholder="Descreva sua empresa ou instituição, área de atuação, valores..." rows="5"></textarea>
+                    </div>
+
+                    <button class="btn" onclick="salvarPerfilEmpregador()" style="width: 100%; margin-top: 1rem; font-size: 1.1rem;">
+                        💾 Salvar Alterações
+                    </button>
+                </div>
+            </div>
+        </div>
+
+ <!-- ===== NOVA SEÇÃO: SOBRE (EMPREGADOR) ===== -->
+        <div id="sobre-emp" class="content-section-emp">
+            <button class="btn-back" onclick="voltarMenuEmpregador()">
+                ← Voltar ao Menu
+            </button>
+            
+            <div class="hero-section">
+                <h1>Nossa História </h1>
+                <p style="text-align: left; margin-top: 2rem;">
+                    A <strong>INCLUTECH WOMAN</strong> nasceu da necessidade de criar um espaço acolhedor e transformador para mulheres na tecnologia. 
+                    Percebemos que, apesar de iniciativas promissoras, muitas plataformas falhavam em se comunicar de maneira eficaz 
+                    com o público feminino.
+                </p>
+                <p style="text-align: left; margin-top: 1rem;">
+                    Nossa missão é clara: reposicionar estrategicamente a inclusão de mulheres em TI, aumentar o interesse e adesão 
+                    de mulheres na área, melhorar a retenção de participantes, e criar uma comunidade de apoio e desenvolvimento contínuo.
+                </p>
+                
+                <h2 style="color: #020659; margin-top: 2rem;">Nossos Propósitos</h2>
+                <ul style="text-align: left; margin-top: 1rem; line-height: 2;">
+                    <li> Promover inclusão genuína e sustentável</li>
+                    <li> Fortalecer a presença feminina na tecnologia</li>
+                    <li> Criar referências e modelos inspiradores</li>
+                    <li> Construir uma rede de apoio mútuo</li>
+                    <li> Impulsionar carreiras e oportunidades</li>
+                </ul>
+                
+                <h2 style="color: #020659; margin-top: 2rem;">Para Empregadores e Instituições</h2>
+                <p style="text-align: left; margin-top: 1rem;">
+                    Ao fazer parte da INCLUTECH WOMAN, você contribui ativamente para a transformação do mercado de tecnologia, 
+                    promovendo diversidade, inovação e igualdade de oportunidades. Juntos, construímos um futuro mais inclusivo e próspero.
+                </p>
+                
+                <div style="background: linear-gradient(135deg, #EE05F2, #8313F2); padding: 2rem; border-radius: 15px; margin-top: 2rem; color: white;">
+                    <h3 style="color: white; margin-bottom: 1rem;"> Impacto da Plataforma</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; text-align: center;">
+                        <div>
+                            <h2 style="color: white; font-size: 2.5rem; margin: 0;">1,200+</h2>
+                            <p style="margin: 0.5rem 0 0 0;">Mulheres cadastradas</p>
+                        </div>
+                        <div>
+                            <h2 style="color: white; font-size: 2.5rem; margin: 0;">350+</h2>
+                            <p style="margin: 0.5rem 0 0 0;">Vagas publicadas</p>
+                        </div>
+                        <div>
+                            <h2 style="color: white; font-size: 2.5rem; margin: 0;">80+</h2>
+                            <p style="margin: 0.5rem 0 0 0;">Empresas parceiras</p>
+                        </div>
+                        <div>
+                            <h2 style="color: white; font-size: 2.5rem; margin: 0;">45+</h2>
+                            <p style="margin: 0.5rem 0 0 0;">Cursos disponíveis</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== FOOTER ==================== -->
+        <footer>
+            <div class="footer-content">
+                <!-- Seção Sobre -->
+                <div class="footer-section">
+                    <h3>Sobre a <strong>INCLUTECH WOMAN</strong></h3>
+                    <p>Plataforma dedicada a empoderar e apoiar mulheres na área de tecnologia da informação.</p>
+                </div>
+                
+                <!-- Seção Links Rápidos -->
+                <div class="footer-section">
+                    <h3>Links Rápidos</h3>
+                    <a href="#" onclick="mostrarAba('sobre')"><u>Sobre Nós</u></a>
+                    <a href="#" onclick="mostrarAba('cursos')"><u>Cursos</u></a>
+                    <a href="#" onclick="mostrarAba('vagas')"><u>Vagas</u></a>
+                    <a href="#" onclick="mostrarAba('redes')"><u>Comunidades</u></a>
+                </div>
+                
+                <!-- Seção Contato -->
+                <div class="footer-section">
+                    <h3>Contato</h3>
+                    <p>Email: contato@inclutechwoman.com.br</p>
+                    <p>Telefone: (83) 99999-9999</p>
+                    
+                    <!-- Redes Sociais -->
+                    <div class="social-links">
+                        <a href="https://instagram.com" target="_blank" title="Instagram"> <img src="https://cdn-icons-png.flaticon.com/128/174/174855.png" alt="ícone instagram"></a>
+                    
+                        <a href="https://linkedin.com" target="_blank" title="LinkedIn"><img src="https://cdn-icons-png.flaticon.com/128/145/145807.png" alt="ícone linkedin"></a>
+                        
+                        <a href="https://whatsapp.com" target="_blank" title="Whatsapp">  <img src="https://cdn-icons-png.flaticon.com/128/3670/3670051.png" alt="ícone whatsapp"></a>
+                      
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Copyright -->
+            <div class="footer-bottom">
+                <p>© 2024 INCLUTECH WOMAN - Todos os direitos reservados</p>
+                <p> Desenvolvido por alunos do SENAI - Campina Grande/PB</p>
+            </div>
+        </footer>
+    </div>
+    
+</body>
+</html>
